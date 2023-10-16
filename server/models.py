@@ -5,6 +5,7 @@ from sqlalchemy import (
     Integer,
     DateTime,
     Text,
+    String,
     ForeignKey,
     Float,
 )
@@ -15,9 +16,19 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+
 def random_delay():
     delta =  random.randint(60, 900)
     return datetime.now() + timedelta(seconds=delta)
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), unique=True, nullable=False)
+    email = Column(String(50), unique=True, nullable=False)
+    password = Column(String(20), nullable=False)
 
 
 class PlateOrder(Base):

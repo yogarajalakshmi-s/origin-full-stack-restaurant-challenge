@@ -5,6 +5,20 @@ from pydantic.utils import GetterDict
 from pydantic import BaseModel
 
 
+class UserRegistration(BaseModel):
+    username: str
+    email: str
+    password: str
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
 class PlateBase(BaseModel):
     plate_name: str
     price: float

@@ -1,14 +1,3 @@
-<script setup>
-import TabMenu from 'primevue/tabmenu';
-import { ref } from 'vue';
-
-const items = ref([
-  {label: 'Menu', to: '/'},
-  {label: 'Orders', to: '/orders'},
-]);
-
-</script>
-
 <template>
   <div class="top-0">
     <TabMenu :model="items" />
@@ -16,6 +5,25 @@ const items = ref([
   </div>
 </template>
 
-<style scoped>
+<script setup>
+import { ref } from 'vue';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
-</style>
+const items = ref([]);
+
+// Function to toggle tab visibility based on the current route
+const updateTabVisibility = () => {
+  const route = useRoute();
+  items.value = [
+    { label: 'Register', to: '/', show: route.path === '/' },
+    { label: 'Register', to: '/login' },
+    { label: 'Menu', to: '/menu', show: route.meta.showOrdersTab },
+    { label: 'Orders', to: '/orders', show: route.meta.showMenuTab },
+  ];
+};
+
+onBeforeRouteUpdate(updateTabVisibility);
+
+// Initialize tab visibility on component mount
+updateTabVisibility();
+</script>

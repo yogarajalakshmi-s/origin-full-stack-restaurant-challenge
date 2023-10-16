@@ -47,7 +47,7 @@ openssl req -x509 \
             -sha256 -days 356 \
             -nodes \
             -newkey rsa:2048 \
-            -subj "/CN=${DOMAIN}/C=CH/L=Geneva" \
+            -subj "//CN=${DOMAIN}/C=CH/L=Geneva" \
             -keyout rootCA.key -out rootCA.crt 
 
 # Generate private key.

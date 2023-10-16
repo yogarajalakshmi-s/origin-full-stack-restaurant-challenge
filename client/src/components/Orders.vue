@@ -23,6 +23,7 @@
             </OrderList>
         </div>
     </div>
+    <router-link to="/">Register</router-link>
 </template>
 
 <script setup>
