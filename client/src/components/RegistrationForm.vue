@@ -5,6 +5,7 @@
         <form @submit.prevent="registerUser">
           <input v-model="user.username" placeholder="Username" required>
           <input v-model="user.email" placeholder="Email" type="email" required>
+          <p v-if="userAlreadyRegistered" class="error-message">User already exists! Please login.</p>
           <input v-model="user.password" placeholder="Password" type="password" required>
           <button type="submit">Register</button>
         </form>
@@ -16,6 +17,8 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { setAuthenticated } from '@/store'; // Import the store
+
 
 export default {
   data() {
@@ -24,13 +27,14 @@ export default {
         username: '',
         email: '',
         password: ''
-      }
+      },
+      userAlreadyRegistered: false
     };
   },
   methods: {
     async registerUser() {
+
       try {
-        // Make an API request to the backend to register the user
         const response = await fetch('/api/users/register', {
           method: 'POST',
           headers: {
@@ -39,33 +43,31 @@ export default {
           body: JSON.stringify(this.user)
         });
         if (response.ok) {
-          // Registration successful, redirect to the Menu
-          this.$router.push('/menu');
+          const responseText = await response.text();
+          if (responseText === '"User already exists! Please login."') {
+            this.userAlreadyRegistered = true;
+            console.log("Response Text:", responseText);
+          } else {
+            localStorage.setItem('userAuthenticated', 'true');
+            setAuthenticated(true);
+            this.$router.push('/');
+          }
         } else {
           alert('Registration failed.');
         }
       } catch (error) {
         console.error(error);
-        alert('An error occurred.');
+        alert('An error occurred when trying to register. Please try again.');
       }
     }
+
   }
 }
 </script>
 
 <style scoped>
 
-body {
-body {
-  background-image: url("/restaurant.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-}
-
 .centered-form {
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -108,5 +110,10 @@ button {
   font-size: 16px;
   margin-top: 10px;
 }
-</style>
 
+.error-message {
+  font-size: 10px;
+  color: red;
+  margin-top: 0px;
+}
+</style>

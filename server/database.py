@@ -7,4 +7,3 @@ DATABASE_URL = f"postgresql://{db_config.db_username}:{db_config.db_password}@{d
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-print(f"Session Local: #{SessionLocal}")

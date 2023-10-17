@@ -83,6 +83,7 @@ Please let us know if you encounter any issue while trying to launch the current
 ### Rules
 - Please implement your solution with the Vue.js (v3) and FastAPI frameworks.
 - Please only use packages that are being shipped with this challenge. This concerns both, front-end and back-end. For example, the front-end includes the packages `primeflex`, `primeicons` and `primevue` which should be sufficient for completing this challenge.
+- If you want to add tests to your submission, you are allowed to use 'vitest' and 'cypress' for the front-end and 'pytest' for the back-end.
 
 ### Submission
 - Please submit your solution as a zip file. It should contain the entire repository, including your .git folder.

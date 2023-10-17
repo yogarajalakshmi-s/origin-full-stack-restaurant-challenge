@@ -1,5 +1,6 @@
 
 <template>
+    <NotLoggedInMessage v-if="!isAuthenticated" />
     <div v-for="(order, i) in orders">
         <div class="card xl:flex xl:justify-content-center">
             <OrderList v-model="orders[i].plates" listStyle="height:auto" dataKey="i">
@@ -11,6 +12,7 @@
                     </div>
                     
                 </template>
+                <button @click="logout" v-if="isAuthenticated">Logout</button>
                 <template #item="slotProps">
                     <div class="flex flex-wrap p-2 align-items-center gap-3">
                         <img class="w-4rem shadow-2 flex-shrink-0 border-round" :src="plateImage(slotProps.item.plate_id)" :alt="slotProps.item.name" />
@@ -23,15 +25,16 @@
             </OrderList>
         </div>
     </div>
-    <router-link to="/">Register</router-link>
 </template>
 
 <script setup>
 import OrderList from 'primevue/orderlist';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
 
 const orders = ref(null);
 const plates = ref();
+
+const { isAuthenticated } = defineProps(['isAuthenticated']); // Access the prop directly
 
 onMounted(async () => {
     // fetch plates from server

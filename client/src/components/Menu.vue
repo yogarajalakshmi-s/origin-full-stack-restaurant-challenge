@@ -8,6 +8,8 @@
                 </div>
             </template>
 
+
+            <button @click="logout" v-if="isAuthenticated">Logout</button>
             <template #list="slotProps">
                 <div class="col-12">
                     <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
@@ -41,11 +43,10 @@
             </template>
         </DataView>
     </div>
-    <router-link to="/">Register</router-link>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
 import Button from 'primevue/button';
 
 import DataView from 'primevue/dataview';
@@ -53,6 +54,8 @@ import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'   // optional
 
 const plates = ref();
 const layout = ref('grid');
+
+const { isAuthenticated } = defineProps(['isAuthenticated']); // Access the prop directly
 
 onMounted(async () => {
     // fetch data from server

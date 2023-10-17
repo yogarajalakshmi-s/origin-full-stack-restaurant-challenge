@@ -1,22 +1,23 @@
 <template>
-  <div  class="background-image">
-      <div class="login-form centered-form">
-        <div class="login-container">
-          <h2>Login</h2>
-          <form @submit.prevent="loginUser">
-            <input v-model="user.email" placeholder="Email" type="email" required>
-            <input v-model="user.password" placeholder="Password" type="password" required>
-            <button type="submit">Login</button>
-          </form>
-          <router-link to="/">Register</router-link>
-        </div>
-      </div>
+  <div class="login-form centered-form">
+    <div class="login-container">
+      <h2>Login</h2>
+      <form @submit.prevent="loginUser">
+        <input v-model="user.email" placeholder="Email" type="email" @input="resetError" required>
+        <p v-if="userNotRegistered" class="error-message">User is not registered. Please register!</p>
+        <input v-model="user.password" placeholder="Password" type="password" required>
+        <p v-if="incorrectPassword" class="error-message">Please enter the correct password!</p>
+        <button type="submit">Login</button>
+      </form>
+      <router-link to="/register">Register</router-link>
+    </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { setAuthenticated } from '@/store'; // Import the store
 
 export default {
   data() {
@@ -24,11 +25,16 @@ export default {
       user: {
         email: "",
         password: ""
-      }
+      },
+      userNotRegistered: false,
+      incorrectPassword: false,
     };
   },
   methods: {
     async loginUser() {
+
+      this.userNotRegistered = false;
+
       try {
         const response = await fetch("/api/users/login", {
           method: "POST",
@@ -39,14 +45,21 @@ export default {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          // Save the token to localStorage or Vuex store
-          localStorage.setItem("access_token", data.access_token);
+          const responseText = await response.text();
 
-          // Redirect to the Menu page or any other route
-          this.$router.push("/menu");
+          if (responseText === '"User does not exist. Please register."') {
+            this.userNotRegistered = true;
+          }
+          else if (responseText === '"Incorrect password"') {
+            this.incorrectPassword = true;
+          }
+          else {
+            localStorage.setItem('userAuthenticated', 'true');
+            setAuthenticated(true);
+            this.$router.push("/");
+          }
         } else {
-          alert("Login failed.");
+            alert("Login failed.");
         }
       } catch (error) {
         console.error(error);
@@ -58,16 +71,8 @@ export default {
 </script>
 
 <style scoped>
-.background-image {
-  background-image: url("/restaurant.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-}
 
 .centered-form {
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -112,4 +117,12 @@ button {
   margin-top: 10px;
 }
 
+.error-message {
+  font-size: 10px;
+  color: red;
+  margin-top: 0px;
+}
+
 </style>
+
+
