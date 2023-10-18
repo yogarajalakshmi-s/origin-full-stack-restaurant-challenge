@@ -70,3 +70,10 @@ class Order(OrderBase):
 
     class Config:
         orm_mode = True
+
+
+class ShoppingCart(BaseModel):
+    id: Optional[int]
+    user_id: int
+    plate_id: int
+    plate_quantity: int

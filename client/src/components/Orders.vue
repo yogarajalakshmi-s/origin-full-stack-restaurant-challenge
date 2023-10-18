@@ -1,6 +1,6 @@
 
 <template>
-    <NotLoggedInMessage v-if="!isAuthenticated" />
+    <NotLoggedInMessage v-if="!isAuthenticated" /> <!-- Using this to avoid unauthenticated users from accessing this page -->
     <div v-for="(order, i) in orders">
         <div class="card xl:flex xl:justify-content-center">
             <OrderList v-model="orders[i].plates" listStyle="height:auto" dataKey="i">

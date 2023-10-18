@@ -1,7 +1,7 @@
 <script setup>
 import TabMenu from 'primevue/tabmenu';
 import { ref, computed, onMounted } from 'vue';
-import { setAuthenticated, isAuthenticated } from './store'; // Import the store
+import { setAuthenticated, isAuthenticated } from './store';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -12,14 +12,17 @@ const items = ref([
   { label: 'Login', to: '/login' },
   { label: 'Menu', to: '/' },
   { label: 'Orders', to: '/orders' },
-  { label: 'Cart', to: '/shopping-cart' },
+  { label: 'Shopping Cart', icon: 'pi pi-shopping-cart', to: '/cart-items' },
   { label: 'Logout', icon: 'pi pi-power-off', to: '/logout' }
 ]);
 
 const filteredItems = computed(() => {
   if (isAuthenticated.value) {
-    return items.value.filter(item => item.to === '/' || item.to === '/orders' || item.to === '/logout');
+
+    // When user is logged in, showing all relevant tabs on all pages.
+    return items.value.filter(item => item.to === '/' || item.to === '/orders' || item.to === '/cart-items' || item.to === '/logout');
   } else {
+        // When user is not logged in, showing only Login and Register tab on the Menu page.
         if (route.path === '/') {
           return items.value.filter(item => item.to === '/register' || item.to === '/login');
         } else {
@@ -28,7 +31,7 @@ const filteredItems = computed(() => {
   }
 });
 
-// Check if the user is authenticated in local storage on component mount
+// Checking if the user is authenticated in local storage on component mount
 onMounted(() => {
   const userAuthenticated = localStorage.getItem('userAuthenticated');
   if (userAuthenticated === 'true') {
@@ -36,15 +39,18 @@ onMounted(() => {
   }
 });
 
+// Handling logout
 function handleTabChange(event) {
   if (event.originalEvent.target.innerText === 'Logout') {
     performLogout();
   }
 }
 
+// Removing all keys set during login and redirecting user to login page after Logout tab is clicked.
 function performLogout() {
   setAuthenticated(false);
   localStorage.removeItem('userAuthenticated');
+  localStorage.removeItem('userId');
   router.push('/login');
 }
 

@@ -18,7 +18,11 @@
                             </div>
                             <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                                 <span class="text-2xl font-semibold">{{ slotProps.data.price }} € </span>
-                                <Button icon="pi pi-shopping-cart" rounded></Button>
+                                <Button
+                                    icon="pi pi-shopping-cart"
+                                    @click="addToCart(slotProps.data)"
+                                    rounded :disabled="slotProps.data.addedToCart">
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -34,7 +38,11 @@
                         </div>
                         <div class="flex align-items-center justify-content-between">
                             <span class="text-2xl font-semibold">{{ slotProps.data.price }} €</span>
-                            <Button icon="pi pi-shopping-cart" rounded></Button>
+                            <Button
+                                icon="pi pi-shopping-cart"
+                                @click="addToCart(slotProps.data)"
+                                rounded :disabled="slotProps.data.addedToCart">
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -44,23 +52,81 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 import Button from 'primevue/button';
+import { isAuthenticated } from '@/store';
 
 import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'   // optional
 
+
 const plates = ref();
 const layout = ref('grid');
-
-const { isAuthenticated } = defineProps(['isAuthenticated']);
+const user = ref(null);
 
 onMounted(async () => {
-    // fetch data from server
     const URL = "https://localhost:8443/api/plates"
     const response = await fetch(URL);
     const data = await response.json();
-    plates.value = data;
+
+    // Disabling cart button for items which are already present in shopping cart, by adding "addToCart" key.
+    if (isAuthenticated.value) {
+        const userId = localStorage.getItem('userId');
+
+        // Finding items which are already added in the cart, filtering using user id.
+        const cartItemsResponse = await fetch(`/api/cart-items/${userId}`);
+        const cartItemsData = await cartItemsResponse.json();
+
+        if (Array.isArray(cartItemsData) && cartItemsData.length > 0) {
+          plates.value = data.map(plate => ({
+            ...plate,
+            addedToCart: cartItemsData.some(item => item.plate_id === plate.plate_id),
+          }));
+        } else {
+            plates.value = data.map(plate => ({ ...plate, addedToCart: false }));
+        }
+    } else {
+        plates.value = data.map(plate => ({ ...plate, addedToCart: false }));
+    }
+
 });
 
+async function addToCart(plate) {
+  if (!isAuthenticated.value) {
+    alert('You are not authenticated. Please login to add dish to cart.');
+    return;
+  }
+
+  if (!plate.addedToCart) {
+    plate.addedToCart = true;
+
+    const requestData = {
+      id: null,
+      user_id: localStorage.getItem('userId'),
+      plate_id: plate.plate_id,
+      plate_quantity: 1
+    };
+
+    try {
+      // Adding items to the shopping cart
+      const response = await fetch('/api/cart-items/add-to-cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        alert('Item added to the cart successfully.');
+      } else {
+        alert('Failed to add item to the cart.');
+      }
+    } catch (error) {
+      alert('An error occurred while adding item to the cart');
+    }
+  } else {
+    alert('Item is already in the cart.');
+  }
+}
 </script>

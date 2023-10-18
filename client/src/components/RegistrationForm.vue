@@ -6,7 +6,7 @@
       <InputText v-model="user.email" placeholder="Email" type="email" required />
       <p v-if="userAlreadyRegistered" class="error-message">User already exists! Please login.</p>
       <InputText v-model="user.password" placeholder="Password" type="password" required />
-      <Button label="Register" type="submit" />
+      <Button label="Register" type="submit"></Button>
     </form>
     <router-link to="/login">Login</router-link>
   </div>
@@ -28,7 +28,7 @@ export default {
         email: '',
         password: ''
       },
-      userAlreadyRegistered: false
+      userAlreadyRegistered: false // To skip registration when user already exists.
     };
   },
   components: {
@@ -47,7 +47,11 @@ export default {
           body: JSON.stringify(this.user)
         });
         if (response.ok) {
-            localStorage.setItem('userAuthenticated', 'true');
+            const responseData = await response.json();
+            const userId = responseData.user_id;
+            localStorage.setItem('userId', userId); // User id is set to access it across pages, on mounting.
+
+            localStorage.setItem('userAuthenticated', 'true'); // To keep track of logged-in user.
             setAuthenticated(true);
             this.$router.push('/');
         } else {
@@ -95,15 +99,8 @@ input {
 }
 
 button {
-  background-color: #646cff;
-  color: white;
-  font-weight: 500;
   padding: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
+  margin: 10px 0;
 }
 
 .error-message {

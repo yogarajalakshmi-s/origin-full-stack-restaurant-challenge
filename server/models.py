@@ -30,6 +30,8 @@ class User(Base):
     email = Column(String(50), unique=True, nullable=False)
     password = Column(String(20), nullable=False)
 
+    shopping_carts = relationship("ShoppingCart", back_populates="user")
+
 
 class PlateOrder(Base):
     __tablename__ = 'plate_order'
@@ -51,6 +53,7 @@ class Plate(Base):
     picture = Column(Text)
 
     orders = relationship("PlateOrder", back_populates="plate")
+    shopping_carts = relationship("ShoppingCart", back_populates="plate")
 
 
 class Order(Base):
@@ -63,3 +66,14 @@ class Order(Base):
 
     plates = relationship("PlateOrder", back_populates="order")
 
+
+class ShoppingCart(Base):
+    __tablename__ = "shopping_cart"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(ForeignKey('user.id'), nullable=False)
+    plate_id = Column(ForeignKey('plate.plate_id'), nullable=False)
+    plate_quantity = Column(Integer, default=1, nullable=False)
+
+    user = relationship("User", back_populates="shopping_carts")
+    plate = relationship("Plate", back_populates="shopping_carts")
