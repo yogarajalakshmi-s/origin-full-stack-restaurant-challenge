@@ -1,17 +1,15 @@
 <template>
-  <body>
-      <div class="registration-form centered-form">
-        <h2>Register</h2>
-        <form @submit.prevent="registerUser">
-          <input v-model="user.username" placeholder="Username" required>
-          <input v-model="user.email" placeholder="Email" type="email" required>
-          <p v-if="userAlreadyRegistered" class="error-message">User already exists! Please login.</p>
-          <input v-model="user.password" placeholder="Password" type="password" required>
-          <button type="submit">Register</button>
-        </form>
-        <router-link to="/login">Login</router-link>
-      </div>
-  </body>
+  <div class="centered-form">
+    <h2>Register</h2>
+    <form @submit.prevent="registerUser">
+      <input v-model="user.username" placeholder="Username" required>
+      <input v-model="user.email" placeholder="Email" type="email" required>
+      <p v-if="userAlreadyRegistered" class="error-message">User already exists! Please login.</p>
+      <input v-model="user.password" placeholder="Password" type="password" required>
+      <button type="submit">Register</button>
+    </form>
+    <router-link to="/login">Login</router-link>
+  </div>
 </template>
 
 <script>
@@ -74,20 +72,12 @@ export default {
   min-height: 100vh;
 }
 
-.registration-form {
-  max-width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-}
-
 h2 {
   font-size: 24px;
 }
 
 form {
+  display: flex;
   flex-direction: column;
 }
 
@@ -112,8 +102,9 @@ button {
 }
 
 .error-message {
-  font-size: 10px;
+  font-size: 14px;
   color: red;
   margin-top: 0px;
 }
+
 </style>

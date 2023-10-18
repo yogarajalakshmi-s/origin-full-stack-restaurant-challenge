@@ -8,8 +8,6 @@
                 </div>
             </template>
 
-
-            <button @click="logout" v-if="isAuthenticated">Logout</button>
             <template #list="slotProps">
                 <div class="col-12">
                     <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">

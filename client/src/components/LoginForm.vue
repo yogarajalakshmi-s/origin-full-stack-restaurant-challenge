@@ -79,15 +79,6 @@ export default {
   min-height: 100vh;
 }
 
-.registration-form {
-  max-width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-}
-
 h2 {
   font-size: 24px;
 }
@@ -118,7 +109,7 @@ button {
 }
 
 .error-message {
-  font-size: 10px;
+  font-size: 14px;
   color: red;
   margin-top: 0px;
 }

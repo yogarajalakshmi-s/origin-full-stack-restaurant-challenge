@@ -12,7 +12,7 @@
                     </div>
                     
                 </template>
-                <button @click="logout" v-if="isAuthenticated">Logout</button>
+
                 <template #item="slotProps">
                     <div class="flex flex-wrap p-2 align-items-center gap-3">
                         <img class="w-4rem shadow-2 flex-shrink-0 border-round" :src="plateImage(slotProps.item.plate_id)" :alt="slotProps.item.name" />
