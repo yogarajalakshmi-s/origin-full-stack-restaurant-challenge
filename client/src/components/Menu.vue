@@ -53,7 +53,7 @@ import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'   // optional
 const plates = ref();
 const layout = ref('grid');
 
-const { isAuthenticated } = defineProps(['isAuthenticated']); // Access the prop directly
+const { isAuthenticated } = defineProps(['isAuthenticated']);
 
 onMounted(async () => {
     // fetch data from server

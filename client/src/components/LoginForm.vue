@@ -17,7 +17,7 @@
 <script>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { setAuthenticated } from '@/store'; // Import the store
+import { setAuthenticated } from '@/store';
 
 export default {
   data() {
@@ -33,8 +33,6 @@ export default {
   methods: {
     async loginUser() {
 
-      this.userNotRegistered = false;
-
       try {
         const response = await fetch("/api/users/login", {
           method: "POST",
@@ -45,21 +43,19 @@ export default {
         });
 
         if (response.ok) {
-          const responseText = await response.text();
-
-          if (responseText === '"User does not exist. Please register."') {
-            this.userNotRegistered = true;
-          }
-          else if (responseText === '"Incorrect password"') {
-            this.incorrectPassword = true;
-          }
-          else {
             localStorage.setItem('userAuthenticated', 'true');
             setAuthenticated(true);
             this.$router.push("/");
-          }
         } else {
-            alert("Login failed.");
+            const responseText = await response.text();
+            const message = JSON.parse(responseText)["detail"];
+
+            if (message === "User does not exist") {
+              this.userNotRegistered = true;
+            }
+            else if (message === "Incorrect password") {
+              this.incorrectPassword = true;
+            }
         }
       } catch (error) {
         console.error(error);

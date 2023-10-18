@@ -12,7 +12,7 @@ router = APIRouter()
 @router.post('/register')
 def register_user(user: UserRegistration, session: Session = Depends(get_db)):
     if get_user_by_email(user.email, session):
-        return "User already exists! Please login."
+        raise HTTPException(status_code=400, detail="User already exists")
     else:
         db_user = md.User(username=user.username, email=user.email, password=user.password)
         new_user = add_new_user(db_user, session)
@@ -24,14 +24,7 @@ def register_user(user: UserRegistration, session: Session = Depends(get_db)):
 def login(user_data: LoginRequest, session: Session = Depends(get_db)):
     user = get_user_by_email(user_data.email, session)
     if not user:
-        return "User does not exist. Please register."
-
+        raise HTTPException(status_code=400, detail="User does not exist")
     elif not user_data.password == user.password:
-        return "Incorrect password"
-
+        raise HTTPException(status_code=400, detail="Incorrect password")
     return {"message": "Login successful", "user_id": user.id}
-
-
-# @router.post("/logout")
-# async def logout(current_user: User = Depends(get_current_user)):
-#     return {"message": "Logout successful"}

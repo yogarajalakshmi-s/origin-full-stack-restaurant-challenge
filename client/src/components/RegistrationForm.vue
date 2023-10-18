@@ -15,7 +15,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { setAuthenticated } from '@/store'; // Import the store
+import { setAuthenticated } from '@/store';
 
 
 export default {
@@ -41,17 +41,16 @@ export default {
           body: JSON.stringify(this.user)
         });
         if (response.ok) {
-          const responseText = await response.text();
-          if (responseText === '"User already exists! Please login."') {
-            this.userAlreadyRegistered = true;
-            console.log("Response Text:", responseText);
-          } else {
             localStorage.setItem('userAuthenticated', 'true');
             setAuthenticated(true);
             this.$router.push('/');
-          }
         } else {
-          alert('Registration failed.');
+           const responseText = await response.text();
+           const message = JSON.parse(responseText)["detail"];
+
+           if (message === "User already exists") {
+             this.userAlreadyRegistered = true;
+           }
         }
       } catch (error) {
         console.error(error);

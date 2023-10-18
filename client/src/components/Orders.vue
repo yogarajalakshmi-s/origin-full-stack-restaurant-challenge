@@ -34,7 +34,7 @@ import { ref, onMounted, defineProps } from 'vue';
 const orders = ref(null);
 const plates = ref();
 
-const { isAuthenticated } = defineProps(['isAuthenticated']); // Access the prop directly
+const { isAuthenticated } = defineProps(['isAuthenticated']);
 
 onMounted(async () => {
     // fetch plates from server
