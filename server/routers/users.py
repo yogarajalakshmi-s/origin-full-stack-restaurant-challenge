@@ -26,5 +26,5 @@ def login(user_data: LoginRequest, session: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=400, detail="User does not exist")
     elif not user_data.password == user.password:
-        raise HTTPException(status_code=400, detail="Incorrect password")
+        raise HTTPException(status_code=401, detail="Incorrect password")
     return {"message": "Login successful", "user_id": user.id}

@@ -7,11 +7,13 @@ import LoginForm from '@/components/LoginForm.vue';
 import NotLoggedInMessage from '@/components/NotLoggedInMessage.vue';
 import { isAuthenticated } from '@/store';
 
-// Define a function to check authentication
+// Defining function to check authentication
 const isAuthenticatedGuard = (to, from, next) => {
   if (to.meta.requiresAuth && !isAuthenticated.value) {
-    // If the route requires authentication and the user is not authenticated, redirect to the login page
+    // If the route requires authentication and the user is not authenticated, redirecting to the login page
     next({ name: 'not-logged-in' });
+  } else if (isAuthenticated.value && (to.path === '/login' || to.path === '/register')) {
+    next('/'); // Redirecting to the menu page if authenticated user tries to access login or registration
   } else {
     // For routes that don't require authentication or for authenticated users, proceed
     next();
@@ -26,12 +28,12 @@ const routes = [
   {
     path: '/orders',
     component: Orders,
-    meta: { requiresAuth: true } // Add a meta field for authentication requirement
+    meta: { requiresAuth: true } // Adding a meta field for authentication requirement
 
   },
   { path: '/register', component: RegistrationForm },
   { path: '/login', component: LoginForm},
-  { path: '/not-logged-in', name: 'not-logged-in', component: NotLoggedInMessage }, // Define a named route for NotLoggedInMessage
+  { path: '/not-logged-in', name: 'not-logged-in', component: NotLoggedInMessage }, // Redirect to this page when users try to access pages other than Menu.
 ]
 
 // 3. Create the router instance and pass the `routes` option
@@ -43,6 +45,6 @@ const router = createRouter({
   routes, // short for `routes: routes`
 })
 
-router.beforeEach(isAuthenticatedGuard); // Apply the authentication guard
+router.beforeEach(isAuthenticatedGuard); // Applying the authentication guard
 
 export default router;

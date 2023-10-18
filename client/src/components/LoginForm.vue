@@ -3,11 +3,11 @@
     <div class="login-container">
       <h2>Login</h2>
       <form @submit.prevent="loginUser">
-        <input v-model="user.email" placeholder="Email" type="email" @input="resetError" required>
+        <InputText v-model="user.email" placeholder="Email" type="text" required />
         <p v-if="userNotRegistered" class="error-message">User is not registered. Please register!</p>
-        <input v-model="user.password" placeholder="Password" type="password" required>
+        <InputText v-model="user.password" placeholder="Password" type="text" required />
         <p v-if="incorrectPassword" class="error-message">Please enter the correct password!</p>
-        <button type="submit">Login</button>
+        <Button label="Login" type="submit" />
       </form>
       <router-link to="/register">Register</router-link>
     </div>
@@ -18,6 +18,8 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { setAuthenticated } from '@/store';
+import InputText from 'primevue/inputtext';
+import Button  from 'primevue/button';
 
 export default {
   data() {
@@ -29,6 +31,10 @@ export default {
       userNotRegistered: false,
       incorrectPassword: false,
     };
+  },
+  components: {
+    InputText,
+    Button
   },
   methods: {
     async loginUser() {

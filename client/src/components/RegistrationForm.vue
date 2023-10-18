@@ -2,11 +2,11 @@
   <div class="centered-form">
     <h2>Register</h2>
     <form @submit.prevent="registerUser">
-      <input v-model="user.username" placeholder="Username" required>
-      <input v-model="user.email" placeholder="Email" type="email" required>
+      <InputText v-model="user.username" placeholder="Username" required />
+      <InputText v-model="user.email" placeholder="Email" type="email" required />
       <p v-if="userAlreadyRegistered" class="error-message">User already exists! Please login.</p>
-      <input v-model="user.password" placeholder="Password" type="password" required>
-      <button type="submit">Register</button>
+      <InputText v-model="user.password" placeholder="Password" type="password" required />
+      <Button label="Register" type="submit" />
     </form>
     <router-link to="/login">Login</router-link>
   </div>
@@ -16,6 +16,8 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { setAuthenticated } from '@/store';
+import InputText from 'primevue/inputtext';
+import Button  from 'primevue/button';
 
 
 export default {
@@ -28,6 +30,10 @@ export default {
       },
       userAlreadyRegistered: false
     };
+  },
+  components: {
+    InputText,
+    Button
   },
   methods: {
     async registerUser() {

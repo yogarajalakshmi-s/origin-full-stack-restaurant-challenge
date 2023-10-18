@@ -12,7 +12,8 @@ const items = ref([
   { label: 'Login', to: '/login' },
   { label: 'Menu', to: '/' },
   { label: 'Orders', to: '/orders' },
-  { label: 'Logout', to: '/logout' }
+  { label: 'Cart', to: '/shopping-cart' },
+  { label: 'Logout', icon: 'pi pi-power-off', to: '/logout' }
 ]);
 
 const filteredItems = computed(() => {
