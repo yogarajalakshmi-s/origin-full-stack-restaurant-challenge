@@ -11,8 +11,8 @@ const items = ref([
   { label: 'Register', to: '/register' },
   { label: 'Login', to: '/login' },
   { label: 'Menu', to: '/' },
-  { label: 'Orders', to: '/orders' },
   { label: 'Shopping Cart', icon: 'pi pi-shopping-cart', to: '/cart-items' },
+  { label: 'Orders', to: '/orders' },
   { label: 'Logout', icon: 'pi pi-power-off', to: '/logout' }
 ]);
 

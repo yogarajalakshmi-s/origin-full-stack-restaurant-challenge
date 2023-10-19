@@ -73,7 +73,7 @@ class ShoppingCart(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(ForeignKey('user.id'), nullable=False)
     plate_id = Column(ForeignKey('plate.plate_id'), nullable=False)
-    plate_quantity = Column(Integer, default=1, nullable=False)
+    plate_quantity = Column(Integer, nullable=False)
 
     user = relationship("User", back_populates="shopping_carts")
     plate = relationship("Plate", back_populates="shopping_carts")
