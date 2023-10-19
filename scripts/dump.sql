@@ -76,7 +76,8 @@ ALTER TABLE public.plate OWNER TO tech_user;
 CREATE TABLE public.plate_order (
     plate_id integer NOT NULL,
     order_id integer NOT NULL,
-    quantity integer NOT NULL
+    quantity integer NOT NULL,
+    user_id integer NULL
 );
 
 
@@ -150,17 +151,17 @@ COPY public.plate (plate_id, plate_name, price, picture) FROM stdin;
 -- Data for Name: plate_order; Type: TABLE DATA; Schema: public; Owner: tech_user
 --
 
-COPY public.plate_order (plate_id, order_id, quantity) FROM stdin;
-1	1	3
-3	1	1
-1	2	1
-2	2	1
-3	2	1
-4	2	1
-3	3	1
-4	3	1
-5	3	1
-6	4	1
+COPY public.plate_order (plate_id, order_id, quantity, user_id) FROM stdin;
+1	1	3	1000000
+3	1	1	1000000
+1	2	1	1000000
+2	2	1	1000000
+3	2	1	1000000
+4	2	1	1000000
+3	3	1	1000000
+4	3	1	1000000
+5	3	1	1000000
+6	4	1	1000000
 \.
 
 

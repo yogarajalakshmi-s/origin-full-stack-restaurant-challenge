@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div  v-if="plates.length > 0">
+    <div v-if="plates.length > 0">
       <div class="p-col-12">
         <div class="p-card p-shadow-2">
           <div class="p-card-content">
@@ -55,13 +55,13 @@ onMounted(async () => {
 });
 
 function calculateTotalPrice() {
-  return plates.value.reduce((total, plate) => total + plate.price, 0);
+  return plates.value.reduce((total, plate) => total + plate.price, 0).toFixed(2);
 }
 
 // Removing item from cart
 async function removePlate(plate) {
   const plateName = plate.plate_name
-  console.log(plate.plate_id + userId);
+  console.log(plate.plate_id)
 
   try {
     const response = await fetch(`/api/cart-items/${plate.plate_id}/${userId}`, {
@@ -76,6 +76,31 @@ async function removePlate(plate) {
     }
   } catch (error) {
     alert("An error occurred while removing " + plateName + " from cart.");
+  }
+}
+
+// Placing order from cart
+async function placeOrder(plate) {
+	const cartItemsResponse = await fetch(`/api/cart-items/${userId}`);
+    const cartItemsData = await cartItemsResponse.json();
+
+  try {
+    const response = await fetch(`/api/orders/add-new-order/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify( cartItemsData ),
+    });
+
+    if (response.ok) {
+      alert("Order placed successfully 🥘");
+      window.location.reload();
+    } else {
+      alert("Failed to place order. Please try again after some time.");
+    }
+  } catch (error) {
+    alert("An error occurred while placing order.");
   }
 }
 

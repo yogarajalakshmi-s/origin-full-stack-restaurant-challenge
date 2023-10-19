@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends
-from server.schemas import OrderBase, Order
+from fastapi import APIRouter, Depends, HTTPException
+from server.schemas import ShoppingCart, Order
 from server.crud.orders import get_orders, add_order
+from server.crud.cart_items import delete_cart_items
 from server.utils import get_db
 from sqlalchemy.orm import Session
 from typing import List
@@ -9,20 +10,17 @@ from typing import List
 router = APIRouter()
 
 
-@router.get("", response_model=List[Order])
+@router.get("/{user_id}", response_model=List[Order])
 async def search_orders(db_session: Session = Depends(get_db)):
-    """Find order by ID.
-
-    """
     return get_orders(db_session)
 
 
-@router.post("", response_model=Order)
+@router.post("/add-new-order/{user_id}")
 async def add_new_order(
-    item: OrderBase,
-    db_session: Session = Depends(get_db)
+    user_id,
+    items: List[ShoppingCart],
+    db_session: Session = Depends(get_db),
 ):
-    """Find order by ID.
-
-    """
-    return add_order(db_session, item)
+    order = add_order(db_session, items)
+    delete_cart_items(user_id, db_session)  # Cleaning up the shopping cart
+    return order

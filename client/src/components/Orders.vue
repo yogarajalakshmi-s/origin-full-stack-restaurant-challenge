@@ -36,6 +36,8 @@ const plates = ref();
 
 const { isAuthenticated } = defineProps(['isAuthenticated']);
 
+const userId = localStorage.getItem('userId');
+
 onMounted(async () => {
     // fetch plates from server
     const URL = "https://localhost:8443/api/plates"
@@ -44,7 +46,7 @@ onMounted(async () => {
     plates.value = data;
 
     // fetch orders from server
-    const URL_ORDERS = "https://localhost:8443/api/orders"
+    const URL_ORDERS = "https://localhost:8443/api/orders/${userId}"
     const response_orders = await fetch(URL_ORDERS);
     const data_orders = await response_orders.json();
     orders.value = data_orders;

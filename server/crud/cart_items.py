@@ -23,13 +23,21 @@ def get_all_plates(user_id, db_session: Session):
         db_session.query(md.Plate).join(md.ShoppingCart)
         .filter(md.ShoppingCart.user_id == user_id).all()
     )
-
     return plates_in_cart
 
 
+# Removing a plate from cart
 def remove_plate_from_cart(plate_id, user_id, db_session: Session):
     cart_item_to_remove = db_session.query(md.ShoppingCart).filter(
         md.ShoppingCart.plate_id == plate_id, md.ShoppingCart.user_id == user_id
     ).first()
     db_session.delete(cart_item_to_remove)
+    db_session.commit()
+
+
+# Removing all cart items associated with the current user.
+def delete_cart_items(user_id, db_session: Session):
+    items_to_remove = db_session.query(md.ShoppingCart).filter_by(user_id=user_id).all()
+    for item in items_to_remove:
+        db_session.delete(item)
     db_session.commit()

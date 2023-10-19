@@ -42,6 +42,7 @@ class PlateCount(Plate):
 class PlateOrderBase(BaseModel):
     plate_id: int
     quantity: int
+    user_id: int
 
 
 class PlateOrderGetter(GetterDict):
