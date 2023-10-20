@@ -30,7 +30,7 @@ def get_plates_using_cart_details(user_id, session: Session = Depends(get_db)):
 
 
 # Deleting plate from shopping cart
-@router.delete("/{plate_id}/{user_id}")
+@router.delete("/remove/{plate_id}/{user_id}")
 def remove_item_from_the_cart(plate_id, user_id, session: Session = Depends(get_db)):
     remove_plate_from_cart(plate_id, user_id, session)
     return {"message": "Item removed successfully"}

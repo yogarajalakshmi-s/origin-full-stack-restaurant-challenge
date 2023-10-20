@@ -32,6 +32,7 @@ class User(Base):
 
     shopping_cart = relationship("ShoppingCart", back_populates="users")
     plate_orders = relationship("PlateOrder", back_populates="user")
+    reviews = relationship("Review", back_populates="user")
 
 
 class PlateOrder(Base):
@@ -57,6 +58,7 @@ class Plate(Base):
 
     orders = relationship("PlateOrder", back_populates="plate")
     shopping_cart = relationship("ShoppingCart", back_populates="plate")
+    reviews = relationship("Review", back_populates="plate")
 
 
 class Order(Base):
@@ -80,3 +82,16 @@ class ShoppingCart(Base):
 
     users = relationship("User", back_populates="shopping_cart")
     plate = relationship("Plate", back_populates="shopping_cart")
+
+
+class Review(Base):
+    __tablename__ = 'review'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(ForeignKey('user.id'), nullable=False)
+    plate_id = Column(ForeignKey('plate.plate_id'), nullable=False)
+    rating = Column(Integer)
+    comment = Column(Text)
+
+    user = relationship("User", back_populates="reviews")
+    plate = relationship("Plate", back_populates="reviews")

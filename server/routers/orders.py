@@ -32,6 +32,6 @@ async def add_new_order(
 
 # Checking if user has placed order on the plate (to display comment and rating feature)
 @router.get("/check-order/{user_id}/{plate_id}")
-async def check_if_order_exists(plate_id: int, user_id: int, db_session: Session = Depends(get_db)):
+async def check_if_order_exists(user_id: int, plate_id: int, db_session: Session = Depends(get_db)):
     order_exists = check_order(user_id, plate_id, db_session)
     return {"orderExists": order_exists}

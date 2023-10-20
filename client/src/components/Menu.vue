@@ -10,45 +10,45 @@
 
             <template #list="slotProps">
                 <div class="col-12">
-					<router-link :to="{ name: 'plate-detail', params: { plateId: slotProps.data.plate_id } }">
-						<div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+					<div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+						<router-link :to="{ name: 'plate-detail', params: { plateId: slotProps.data.plate_id } }">
 							<img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" :src="slotProps.data.picture" :alt="slotProps.data.plate_name" />
-							<div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-								<div class="flex flex-column align-items-center sm:align-items-start gap-3">
-									<div class="text-2xl font-bold text-900">{{ slotProps.data.plate_name }}</div>
-								</div>
-								<div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-									<span class="text-2xl font-semibold">{{ slotProps.data.price }} € </span>
-									<Button
-										icon="pi pi-shopping-cart"
-										@click="addToCart(slotProps.data)"
-										rounded :disabled="slotProps.data.addedToCart">
-									</Button>
-								</div>
+						</router-link>
+						<div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+							<div class="flex flex-column align-items-center sm:align-items-start gap-3">
+								<div class="text-2xl font-bold text-900">{{ slotProps.data.plate_name }}</div>
 							</div>
-						</div>
-					</router-link>
-                </div>
-            </template>
-
-            <template #grid="slotProps">
-                <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
-					<router-link :to="{ name: 'plate-detail', params: { plateId: slotProps.data.plate_id } }">
-						<div class="p-4 border-1 surface-border surface-card border-round">
-							<div class="flex flex-column align-items-center gap-3 py-5">
-								<img class="w-9 shadow-2 border-round" :src="slotProps.data.picture" :alt="slotProps.data.plate_name" />
-								<div class="text-2xl font-bold">{{ slotProps.data.plate_name }}</div>
-							</div>
-							<div class="flex align-items-center justify-content-between">
-								<span class="text-2xl font-semibold">{{ slotProps.data.price }} €</span>
+							<div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+								<span class="text-2xl font-semibold">{{ slotProps.data.price }} € </span>
 								<Button
 									icon="pi pi-shopping-cart"
 									@click="addToCart(slotProps.data)"
 									rounded :disabled="slotProps.data.addedToCart">
 								</Button>
 							</div>
-                    	</div>
-                    </router-link>
+						</div>
+					</div>
+                </div>
+            </template>
+
+            <template #grid="slotProps">
+                <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
+					<div class="p-4 border-1 surface-border surface-card border-round">
+						<div class="flex flex-column align-items-center gap-3 py-5">
+							<router-link :to="{ name: 'plate-detail', params: { plateId: slotProps.data.plate_id } }">
+								<img class="w-9 shadow-2 border-round" :src="slotProps.data.picture" :alt="slotProps.data.plate_name" />
+								<div class="text-2xl font-bold">{{ slotProps.data.plate_name }}</div>
+							</router-link>
+						</div>
+						<div class="flex align-items-center justify-content-between">
+							<span class="text-2xl font-semibold">{{ slotProps.data.price }} €</span>
+							<Button
+								icon="pi pi-shopping-cart"
+								@click="addToCart(slotProps.data)"
+								rounded :disabled="slotProps.data.addedToCart">
+							</Button>
+						</div>
+                    </div>
                 </div>
             </template>
         </DataView>
@@ -137,6 +137,11 @@ async function addToCart(plate) {
 
 <style scoped>
 .text-2xl {
-	color: black;
+  color: black;
+}
+
+img:hover{
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
 }
 </style>

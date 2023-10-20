@@ -64,7 +64,7 @@ async function removePlate(plate) {
   console.log(plate.plate_id)
 
   try {
-    const response = await fetch(`/api/cart-items/${plate.plate_id}/${userId}`, {
+    const response = await fetch(`/api/cart-items/remove/${plate.plate_id}/${userId}`, {
       method: 'DELETE'
     });
 
@@ -90,7 +90,7 @@ async function placeOrder(plate) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify( cartItemsData ),
+      body: JSON.stringify(cartItemsData),
     });
 
     if (response.ok) {

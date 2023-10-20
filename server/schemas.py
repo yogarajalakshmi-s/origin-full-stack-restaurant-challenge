@@ -78,3 +78,11 @@ class ShoppingCart(BaseModel):
     user_id: int
     plate_id: int
     plate_quantity: int
+
+
+class Review(BaseModel):
+    id: Optional[int]
+    user_id: int
+    plate_id: int
+    rating: int
+    comment: str

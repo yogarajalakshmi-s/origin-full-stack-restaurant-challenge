@@ -29,7 +29,7 @@ def get_all_plates(user_id, db_session: Session):
 # Removing a plate from cart
 def remove_plate_from_cart(plate_id, user_id, db_session: Session):
     cart_item_to_remove = db_session.query(md.ShoppingCart).filter(
-        plate_id == plate_id, user_id == user_id).first()
+        md.ShoppingCart.plate_id == plate_id, md.ShoppingCart.user_id == user_id).first()
 
     db_session.delete(cart_item_to_remove)
     db_session.commit()

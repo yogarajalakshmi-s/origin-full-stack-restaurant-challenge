@@ -35,9 +35,8 @@ def add_order(db_session: Session, cart_items):
     return order
 
 
-def check_order(plate_id: int, user_id: int, db_session: Session):
-    order = (
-        db_session.query(md.PlateOrder)
-        .filter_by(user_id=user_id, plate_id=plate_id).first()
-    )
+def check_order(user_id: int, plate_id: int, db_session: Session):
+    order = db_session.query(md.PlateOrder).filter_by(
+        user_id=user_id, plate_id=plate_id).first()
+
     return True if order else False
