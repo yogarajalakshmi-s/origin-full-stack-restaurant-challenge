@@ -5,9 +5,14 @@ import server.models as md
 
 
 def get_orders(user_id: int, db_session: Session):
-    user = db_session.query(md.User).filter_by(id=user_id).first()
-    order = list({plate_order.order for plate_order in user.plate_orders})
-    return order
+    orders = (
+        db_session.query(md.Order)
+        .join(md.PlateOrder)
+        .filter(md.PlateOrder.user_id == user_id)
+        .order_by(md.Order.order_time.asc())
+        .all()
+    )
+    return orders
 
 
 def add_order(db_session: Session, cart_items):
@@ -28,3 +33,11 @@ def add_order(db_session: Session, cart_items):
     db_session.refresh(order)
 
     return order
+
+
+def check_order(plate_id: int, user_id: int, db_session: Session):
+    order = (
+        db_session.query(md.PlateOrder)
+        .filter_by(user_id=user_id, plate_id=plate_id).first()
+    )
+    return True if order else False

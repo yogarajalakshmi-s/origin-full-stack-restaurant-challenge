@@ -6,6 +6,7 @@ import NotLoggedInMessage from '@/components/NotLoggedInMessage.vue';
 import Menu from '@/components/Menu.vue'
 import Orders from '@/components/Orders.vue'
 import CartItems from '@/components/CartItems.vue'
+import PlateDetails from '@/components/PlateDetails.vue'
 import { isAuthenticated } from '@/store';
 
 // Defining function to check authentication
@@ -34,7 +35,8 @@ const routes = [
   },
   { path: '/cart-items', component: CartItems,
     meta: { requiresAuth: true }
-  }
+  },
+  { path: '/plate-detail/:plateId', component: PlateDetails, name: 'plate-detail' }
 ]
 
 // 3. Create the router instance and pass the `routes` option

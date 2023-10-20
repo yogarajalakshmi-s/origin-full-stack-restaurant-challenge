@@ -5,8 +5,14 @@ from server.schemas import PlateBase, Plate, PlateCount
 
 import server.models as md
 
+
 def get_plates(db_session: Session):
     return db_session.query(md.Plate).all()
+
+
+def get_plate(plate_id: int, db_session: Session):
+    plate = db_session.query(md.Plate).filter_by(plate_id=plate_id).first()
+    return plate
 
 
 def get_plates_count(db_session: Session):

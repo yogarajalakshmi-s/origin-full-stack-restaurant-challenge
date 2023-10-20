@@ -112,45 +112,55 @@ async function placeOrder(plate) {
   display: flex;
   align-items: center;
 }
+
 .p-card-content {
   padding: 1.25rem 1rem;
   margin: 10px;
 }
+
 .p-card-details {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
+
 .p-card .p-card-title {
   font-size: 20px;
 }
+
 .p-card-subtitle {
   text-align: right;
 }
+
 .p-card-title, .p-card-subtitle {
   display: inline-block;
   margin-right: 10px;
 }
+
 .p-card-image {
   max-width: 100px;
   margin-right: 25px;
   margin-left: 10px;
   border-radius: 8px;
 }
+
 .p-card-flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .p-card-total {
   text-align: right;
   font-weight: bold;
   margin-top: 10px;
   margin-right: 10px;
 }
+
 .p-button-danger {
   margin-left: 1rem;
 }
+
 .custom-remove-button {
   padding: 0.25rem 0.5rem;
   font-size: 14px;
