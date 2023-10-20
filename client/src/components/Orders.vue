@@ -1,30 +1,38 @@
 
 <template>
     <NotLoggedInMessage v-if="!isAuthenticated" /> <!-- Using this to avoid unauthenticated users from accessing this page -->
-    <div v-for="(order, i) in orders">
-        <div class="card xl:flex xl:justify-content-center">
-            <OrderList v-model="orders[i].plates" listStyle="height:auto" dataKey="i">
-                <template #header>
-                    <div class="flex gap-5">
-                        <span># {{ orders[i].order_id }}</span>
-                        <span>{{ parseTimeToString(orders[i].order_time) }}</span>
-                        <span>Total: {{ getOrderTotal(orders[i].order_id) }} €</span>
-                    </div>
-                    
-                </template>
+	<div v-if="isLoading">Loading orders...</div>
+	<div v-else>
+		<div class="no-items" v-if="orders.length === 0">
+			You currently have no orders. Please view the <a href="/client/">Menu</a> and find the true meaning of deliciousness 🍕😋
+		</div>
+		<div v-else>
+			<div v-for="(order, i) in orders">
+				<div class="card xl:flex xl:justify-content-center">
+					<OrderList v-model="orders[i].plates" listStyle="height:auto" dataKey="i">
+						<template #header>
+							<div class="flex gap-5">
+								<span># {{ i + 1 }}</span>
+								<span>{{ parseTimeToString(orders[i].order_time) }}</span>
+								<span>Total: {{ getOrderTotal(orders[i].order_id) }} €</span>
+							</div>
 
-                <template #item="slotProps">
-                    <div class="flex flex-wrap p-2 align-items-center gap-3">
-                        <img class="w-4rem shadow-2 flex-shrink-0 border-round" :src="plateImage(slotProps.item.plate_id)" :alt="slotProps.item.name" />
-                        <div class="flex-1 flex flex-column gap-2">
-                            <span class="font-bold w-10rem">{{ slotProps.item.quantity }} x {{ slotProps.item.plate_name }}</span>
-                        </div>
-                        <span class="font-bold text-900">{{ platePrice(slotProps.item.plate_id) * slotProps.item.quantity }} €</span>
-                    </div>
-                </template>
-            </OrderList>
-        </div>
-    </div>
+						</template>
+
+						<template #item="slotProps">
+							<div class="flex flex-wrap p-2 align-items-center gap-3">
+								<img class="w-4rem shadow-2 flex-shrink-0 border-round" :src="plateImage(slotProps.item.plate_id)" :alt="slotProps.item.name" />
+								<div class="flex-1 flex flex-column gap-2">
+									<span class="font-bold w-10rem">{{ slotProps.item.quantity }} x {{ slotProps.item.plate_name }}</span>
+								</div>
+								<span class="font-bold text-900">{{ platePrice(slotProps.item.plate_id) * slotProps.item.quantity }} €</span>
+							</div>
+						</template>
+					</OrderList>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script setup>
@@ -33,6 +41,7 @@ import { ref, onMounted, defineProps } from 'vue';
 
 const orders = ref(null);
 const plates = ref();
+const isLoading = ref(true);
 
 const { isAuthenticated } = defineProps(['isAuthenticated']);
 
@@ -50,6 +59,8 @@ onMounted(async () => {
     const response_orders = await fetch(URL_ORDERS);
     const data_orders = await response_orders.json();
     orders.value = data_orders;
+
+    isLoading.value = false;
 });
 
 
@@ -78,3 +89,12 @@ function getOrderTotal(orderId) {
 }
 
 </script>
+
+<style scoped>
+
+.no-items {
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+</style>
