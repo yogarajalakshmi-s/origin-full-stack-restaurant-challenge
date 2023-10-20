@@ -4,10 +4,10 @@ from fastapi import HTTPException
 import server.models as md
 
 
-def get_orders(db_session: Session):
-    orders = db_session.query(md.Order).filter_by().all()
-    print(orders)
-    return orders
+def get_orders(user_id: int, db_session: Session):
+    user = db_session.query(md.User).filter_by(id=user_id).first()
+    order = list({plate_order.order for plate_order in user.plate_orders})
+    return order
 
 
 def add_order(db_session: Session, cart_items):
@@ -18,7 +18,8 @@ def add_order(db_session: Session, cart_items):
         plate_order = md.PlateOrder(
             plate_id=item.plate_id,
             order_id=order.order_id,
-            quantity=item.plate_quantity
+            quantity=item.plate_quantity,
+            user_id=item.user_id
         )
         order.plates.append(plate_order)
 

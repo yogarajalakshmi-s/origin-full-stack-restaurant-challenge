@@ -46,7 +46,7 @@ onMounted(async () => {
     plates.value = data;
 
     // fetch orders from server
-    const URL_ORDERS = "https://localhost:8443/api/orders/${userId}"
+    const URL_ORDERS = `https://localhost:8443/api/orders/${userId}`
     const response_orders = await fetch(URL_ORDERS);
     const data_orders = await response_orders.json();
     orders.value = data_orders;

@@ -18,7 +18,7 @@ Base = declarative_base()
 
 
 def random_delay():
-    delta =  random.randint(60, 900)
+    delta = random.randint(60, 900)
     return datetime.now() + timedelta(seconds=delta)
 
 
