@@ -7,7 +7,12 @@
 					<img :src="plate.picture" :alt="plate.plate_name" class="plate-image" />
 					<div class="p-card-title">{{ plate.plate_name }}</div>
 					<div class="p-card-subtitle">Price: {{ plate.price }} €</div>
-					<div class="p-card-content"><strong>Average rating:</strong> {{ calculateAverageRating() }} / 5</div>
+					<div class="p-card-content">
+						<div v-if="calculateAverageRating() === 0"></div> <!-- Hiding Average reviews when no reviews are given -->
+						<div v-else>
+							<strong>Average rating:</strong> {{ calculateAverageRating() }} / 5
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
