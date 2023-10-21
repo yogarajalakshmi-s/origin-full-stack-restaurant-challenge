@@ -15,15 +15,21 @@
             <div class="p-card-details">
               <div class="p-card-header p-card-flex">
                 <div class="p-card-title">{{ plate.plate_name }} x {{ plate.shopping_cart[0].plate_quantity }}</div>
-                <div class="p-card-subtitle">{{ plate.price }} €</div>
+                <div class="p-card-subtitle"> = {{ plate.price * plate.shopping_cart[0].plate_quantity }} €</div>
               </div>
             </div>
-            <button @click="incrementQuantity(plate)" class="p-button p-button-icon p-button-primary p-button-xs">
-              <i class="pi pi-plus"></i>
-            </button>
-            <button @click="decrementQuantity(plate)" class="p-button p-button-icon p-button-danger p-button-xs">
-              <i class="pi pi-minus"></i>
-            </button>
+            <div class="p-card-quantity-buttons">
+              <div class="p-button-container">
+                <button @click="incrementQuantity(plate)" class="p-button p-button-icon p-button-primary">
+                  <i class="pi pi-plus p-icon-small"></i>
+                </button>
+              </div>
+              <div class="p-button-container">
+                <button @click="decrementQuantity(plate)" class="p-button p-button-icon p-button-danger">
+                  <i class="pi pi-minus p-icon-small"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -60,7 +66,9 @@ onMounted(async () => {
 });
 
 function calculateTotalPrice() {
-  return plates.value.reduce((total, plate) => total + plate.price, 0).toFixed(2);
+  return plates.value.reduce((total, plate) => {
+    return total + plate.price * plate.shopping_cart[0].plate_quantity;
+  }, 0).toFixed(2);
 }
 
 // Removing item from cart
@@ -178,6 +186,7 @@ async function updateQuantity(plate, updatedQuantity) {
 .p-card-title, .p-card-subtitle {
   display: inline-block;
   margin-right: 10px;
+  font-weight: 700 !important;
 }
 
 .p-card-image {
@@ -200,10 +209,6 @@ async function updateQuantity(plate, updatedQuantity) {
   margin-right: 10px;
 }
 
-.p-button-danger {
-  margin-left: 1rem;
-}
-
 .custom-remove-button {
   padding: 0.25rem 0.5rem;
   font-size: 14px;
@@ -217,5 +222,13 @@ async function updateQuantity(plate, updatedQuantity) {
 .p-button-lg {
   background-color: green;
   margin-top: 10px
+}
+
+.p-button-container {
+  margin-bottom: 5px;
+}
+
+.p-icon-small {
+    font-size: 10px;
 }
 </style>
