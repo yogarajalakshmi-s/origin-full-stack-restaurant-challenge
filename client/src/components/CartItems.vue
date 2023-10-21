@@ -14,10 +14,16 @@
             </div>
             <div class="p-card-details">
               <div class="p-card-header p-card-flex">
-                <div class="p-card-title">{{ plate.plate_name }}</div>
+                <div class="p-card-title">{{ plate.plate_name }} x {{ plate.shopping_cart[0].plate_quantity }}</div>
                 <div class="p-card-subtitle">{{ plate.price }} €</div>
               </div>
             </div>
+            <button @click="incrementQuantity(plate)" class="p-button p-button-icon p-button-primary p-button-xs">
+              <i class="pi pi-plus"></i>
+            </button>
+            <button @click="decrementQuantity(plate)" class="p-button p-button-icon p-button-danger p-button-xs">
+              <i class="pi pi-minus"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -60,7 +66,6 @@ function calculateTotalPrice() {
 // Removing item from cart
 async function removePlate(plate) {
   const plateName = plate.plate_name
-  console.log(plate.plate_id)
 
   try {
     const response = await fetch(`/api/cart-items/remove/${plate.plate_id}/${userId}`, {
@@ -68,7 +73,6 @@ async function removePlate(plate) {
     });
 
     if (response.ok) {
-      alert(plateName + " removed from cart.");
       window.location.reload();
     } else {
       alert("Failed to remove " + plateName + " from cart.");
@@ -79,7 +83,7 @@ async function removePlate(plate) {
 }
 
 // Placing order from cart
-async function placeOrder(plate) {
+async function placeOrder() {
 	const cartItemsResponse = await fetch(`/api/cart-items/${userId}`);
     const cartItemsData = await cartItemsResponse.json();
 
@@ -100,6 +104,46 @@ async function placeOrder(plate) {
     }
   } catch (error) {
     alert("An error occurred while placing order.");
+  }
+}
+
+
+// Increasing pkate quantity
+async function incrementQuantity(plate) {
+  const updatedQuantity = plate.shopping_cart[0].plate_quantity + 1;
+  await updateQuantity(plate, updatedQuantity);
+}
+
+// Decreasing plate quantity
+async function decrementQuantity(plate) {
+  const updatedQuantity = plate.shopping_cart[0].plate_quantity - 1;
+  await updateQuantity(plate, updatedQuantity);
+}
+
+// Updating the plate quantity
+async function updateQuantity(plate, updatedQuantity) {
+  const plateName = plate.plate_name;
+
+  if (updatedQuantity === 0) {
+    removePlate(plate)
+  }
+  else {
+    try {
+      const response = await fetch(`/api/cart-items/update-quantity/${userId}/${plate.plate_id}?quantity=${updatedQuantity}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        alert(`Failed to update ${plateName} quantity`);
+      }
+    } catch (error) {
+      alert(`An error occurred while updating ${plateName} quantity`);
+    }
   }
 }
 

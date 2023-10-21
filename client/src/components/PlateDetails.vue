@@ -205,6 +205,10 @@ function calculateAverageRating() {
   border-radius: 5px;
 }
 
+h3 {
+  margin-top: 40px;
+}
+
 .user-rating {
   display: flex;
   align-items: center;
