@@ -52,6 +52,12 @@
                 </div>
             </template>
         </DataView>
+
+        <div class="chat-button" @click="toggleChatBox">
+          <i class="pi pi-comment"></i>
+        </div>
+
+        <Chat :visible="isChatBoxOpen" @update:visible="updateChatDialogVisibility" />
     </div>
 </template>
 
@@ -62,11 +68,15 @@ import { isAuthenticated } from '@/store';
 
 import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'   // optional
+import Chat from '@/components/Chat.vue';
 
 
 const plates = ref();
 const layout = ref('grid');
-const user = ref(null);
+
+const isChatBoxOpen = ref(false);
+const isChatDialogOpen = ref(false);
+
 
 onMounted(async () => {
     const URL = "https://localhost:8443/api/plates"
@@ -94,6 +104,14 @@ onMounted(async () => {
     }
 
 });
+
+function toggleChatBox() {
+  isChatBoxOpen.value = !isChatBoxOpen.value;
+}
+
+function updateChatDialogVisibility(value) {
+  isChatBoxOpen.value = !isChatBoxOpen.value;
+}
 
 async function addToCart(plate) {
   if (!isAuthenticated.value) {
@@ -144,4 +162,26 @@ img:hover{
   transform: scale(1.1);
   transition: transform 0.3s ease;
 }
+
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9998;
+}
+
+.chat-button i {
+  font-size: 24px;
+}
+
 </style>
