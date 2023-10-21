@@ -2,16 +2,14 @@
 	<div v-if="isLoading">Loading orders...</div>
 	<div v-else>
 		<div class="p-grid p-justify-center">
-		  <div class="p-col-12 p-md-6">
-			<div class="p-card">
-			  <img :src="plate.picture" :alt="plate.plate_name" class="plate-image" />
-			  <div class="p-card-title">{{ plate.plate_name }}</div>
-			  <div class="p-card-subtitle">Price: {{ plate.price }} €</div>
-			  <div class="p-card-content">
-				<p>{{ plate.description }}</p>
-			  </div>
+			<div class="p-col-12 p-md-6">
+				<div class="p-card">
+					<img :src="plate.picture" :alt="plate.plate_name" class="plate-image" />
+					<div class="p-card-title">{{ plate.plate_name }}</div>
+					<div class="p-card-subtitle">Price: {{ plate.price }} €</div>
+					<div class="p-card-content"><strong>Average rating:</strong> {{ calculateAverageRating() }} / 5</div>
+				</div>
 			</div>
-		  </div>
 		</div>
 
 		<!--  Commenting and Rating feature -->
@@ -25,11 +23,24 @@
 				</div>
 
 				<div class="rating-box">
-					<Rating v-model="rating" :cancel="false" :max="5"></Rating>
+					<Rating v-model="rating" :max="5" :cancel="false"></Rating>
 				</div>
 			</div>
 		</div>
 
+		<div v-if="allReviews.length > 0">
+			<h3>Reviews</h3>
+			<div class="review">
+				<div v-for="(review, index) in allReviews" :key="index" class="review-item">
+					<div class="user-rating">
+						<div class="user-info">
+							<strong>{{ review.user.username }} </strong> [Rating: {{ review.rating }}/5]
+						</div>
+					</div>
+					<div class="comment">{{ review.comment }}</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -45,6 +56,7 @@ const plateId = route.params.plateId;
 const plate = ref(null);
 const userHasPlacedOrder = ref(false);
 const hasSubmittedReview = ref(false);
+const allReviews = ref([]);
 
 const comment = ref('');
 const rating = ref(0);
@@ -70,7 +82,7 @@ onMounted(async () => {
   	alert('An error occurred while fetching plate details');
   }
 
-// Checking if user has submitted review for a particular plate - If true, user will not have option to comment and rate.
+  // Checking if user has submitted review for a particular plate - If true, user will not be able to comment and rate.
   const reviewResponse = await fetch(`/api/reviews/${userId}/${plateId}`);
   const reviewResponseData = await reviewResponse.json();
   hasSubmittedReview.value = reviewResponseData.reviewPresent;
@@ -84,6 +96,11 @@ onMounted(async () => {
 	 // Displaying comment and rating feature, only if this is true.
 	 userHasPlacedOrder.value = order_response.orderExists;
   }
+
+  // Fetching all reviews of all users to display.
+  const allReviewsResponse = await fetch(`/api/reviews/all?plate_id=${plateId}`);
+  const allReviewsData = await allReviewsResponse.json();
+  allReviews.value = allReviewsData;
 
   isLoading.value = false;
 
@@ -99,10 +116,10 @@ const submitReview = async (e) => {
     "comment": comment.value,
     "rating": rating.value,
   };
-
   console.log(comment.value);
+
   try {
-    const response = await fetch(`https://localhost:8443/api/reviews/add-review`, {
+    const response = await fetch(`/api/reviews/add-review`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -110,7 +127,6 @@ const submitReview = async (e) => {
       body: JSON.stringify(reviewData),
     });
     if (response.ok) {
-	  userSubmittedReview.value = true;
 	  window.location.reload();
     }
   } catch (error) {
@@ -118,9 +134,19 @@ const submitReview = async (e) => {
   }
 };
 
+function calculateAverageRating() {
+  if (allReviews.value.length === 0) {
+    return 0;
+  }
+
+  const totalRating = allReviews.value.reduce((total, review) => total + review.rating, 0);
+  return (totalRating / allReviews.value.length).toFixed(1);
+};
+
 </script>
 
 <style scoped>
+
 .p-card {
   margin: 20px;
 }
@@ -156,4 +182,35 @@ const submitReview = async (e) => {
 	margin-top: 1rem;
 }
 
+.review {
+  text-align: left;
+  display: grid;
+  grid-gap: 20px;
+}
+
+.comment {
+	margin-top: 5px;
+}
+
+.review-item {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.user-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  margin-right: 10px;
+}
+
+.comment {
+  margin-top: 5px;
+}
 </style>

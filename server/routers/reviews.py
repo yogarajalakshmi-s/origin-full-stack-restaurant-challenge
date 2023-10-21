@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from server.schemas import Review
-from server.crud.reviews import add_review, search_review
+from server.crud.reviews import add_review, search_review, get_all_reviews
 from server.utils import get_db
 from sqlalchemy.orm import Session
 
@@ -19,5 +19,11 @@ def register_user(review: Review, session: Session = Depends(get_db)):
 @router.get('/{user_id}/{plate_id}')
 def get_review(user_id: int, plate_id: int, db_session: Session = Depends(get_db)):
     review_exists = search_review(user_id, plate_id, db_session)
-    print(review_exists)
     return {"reviewPresent": review_exists}
+
+
+# Retrieving all reviews of all users for a particular plate
+@router.get('/all')
+def fetch_all_reviews(plate_id: int, db_session: Session = Depends(get_db)):
+    reviews = get_all_reviews(plate_id, db_session)
+    return reviews

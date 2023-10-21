@@ -41,7 +41,6 @@
 </template>
 
 <script setup>
-import OrderList from 'primevue/orderlist';
 import { ref, onMounted, defineProps } from 'vue';
 
 const { isAuthenticated } = defineProps(['isAuthenticated']);
