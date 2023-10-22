@@ -1,11 +1,11 @@
 <template>
-    <Dialog v-model="dialogVisible" header="Chat" :modal="false" class="chat-container">
-        <div class="chat-messages">
-            <div v-for="(message, index) in messages" :key="index" class="message">
-                <div :class="{ 'user-message': message.isCustomer, 'employee-message': !message.isCustomer }">{{ message.text }}</div>
-            </div>
-            <input v-model="newMessage" @keyup.enter="sendMessage" class="chat-input" placeholder="Type your message..." />
-        </div>
+    <Dialog v-model="dialogVisible" header="Chat" :modal="false" :style="{ position: 'fixed', bottom: '80px', right: '20px', transform: 'none', transition: 'transform 0.3s ease', zIndex: '9999', maxWidth: '400px', width: '100%' }">
+      <div class="chat-messages">
+          <div v-for="(message, index) in messages" :key="index" class="message">
+              <div :class="{ 'user-message': message.isCustomer, 'employee-message': !message.isCustomer }">{{ message.text }}</div>
+          </div>
+          <input v-model="newMessage" @keyup.enter="sendMessage" class="chat-input" placeholder="Type your message..." />
+      </div>
     </Dialog>
 </template>
 
@@ -31,7 +31,7 @@ export default {
         "Enjoy your meal!",
         "Thank you for choosing our service. Have a great day!"
       ],
-    };
+    }
   },
 
   components: {
@@ -94,17 +94,5 @@ export default {
   padding: 5px;
   border: 1px solid #ccc;
 }
-
-.chat-container {
-  position: fixed;
-  right: 20px !important;
-  bottom: 20px !important;
-  transform: none !important;
-  transition: transform 0.3s ease !important;
-  z-index: 9999;
-  max-width: 400px;
-  width: 100%;
-}
-
 
 </style>
