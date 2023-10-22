@@ -38,7 +38,7 @@ async def check_if_order_exists(user_id: int, plate_id: int, db_session: Session
 
 
 # Updating order status
-@router.put("/update-order-status/${order_id}")
+@router.put("/update-order-status/{order_id}")
 def update_order_status(order_id: int, status: str, db_session: Session = Depends(get_db)):
     order = search_order(order_id, db_session)
     if order:

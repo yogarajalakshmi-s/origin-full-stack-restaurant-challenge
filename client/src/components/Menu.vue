@@ -75,8 +75,6 @@ const plates = ref();
 const layout = ref('grid');
 
 const isChatBoxOpen = ref(false);
-const isChatDialogOpen = ref(false);
-
 
 onMounted(async () => {
     const URL = "https://localhost:8443/api/plates"

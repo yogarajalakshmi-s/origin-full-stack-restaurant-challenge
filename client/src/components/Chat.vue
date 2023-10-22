@@ -102,7 +102,7 @@ export default {
   transform: none !important;
   transition: transform 0.3s ease !important;
   z-index: 9999;
-  max-width: 400px; /* Adjust the width as needed */
+  max-width: 400px;
   width: 100%;
 }
 

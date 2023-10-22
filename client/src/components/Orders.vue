@@ -15,6 +15,13 @@
 								<span># {{ i + 1 }}</span>
 								<span>{{ parseTimeToString(orders[i].order_time) }}</span>
 								<span>Total: {{ getOrderTotal(orders[i].order_id) }} €</span>
+                <Dropdown 
+                  :options="nextValidStatuses(order)" 
+                  v-model="order.selectedStatus" 
+                  :placeholder="order.status" 
+                  @change="updateOrderStatus(order, order.selectedStatus)" 
+                  :disabled="['Delivered', 'Cancelled', 'Rejected'].includes(order.status)"
+                />
 							</div>
 
 						</template>
@@ -38,6 +45,7 @@
 <script setup>
 import OrderList from 'primevue/orderlist';
 import { ref, onMounted, defineProps } from 'vue';
+import Dropdown from 'primevue/dropdown';
 
 const orders = ref(null);
 const plates = ref();
@@ -46,6 +54,8 @@ const isLoading = ref(true);
 const { isAuthenticated } = defineProps(['isAuthenticated']);
 
 const userId = localStorage.getItem('userId');
+
+const selectedStatus = ref(null);
 
 onMounted(async () => {
     // fetch plates from server
@@ -86,6 +96,37 @@ function getOrderTotal(orderId) {
         total += platePrice(plate.plate_id) * plate.quantity;
     });
     return total.toFixed(2);
+}
+
+function nextValidStatuses(order) {
+  const currentStatus = order.status;
+  const validTransitions = {
+    Submitted: ['Approved', 'Rejected', 'Cancelled'],
+    Approved: ['In Preparation', 'Cancelled'],
+    'In Preparation': ['In Delivery'],
+    'In Delivery': ['Delivered'],
+    Rejected: [],
+    Cancelled: [],
+    Delivered: [],
+  };
+  return validTransitions[currentStatus];
+}
+
+async function updateOrderStatus(order, newStatus) {
+
+  const response = await fetch(`/api/orders/update-order-status/${order.order_id}?status=${newStatus}`, {
+    method: 'PUT'
+  });
+
+  try {
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        alert(`Cannot switch from ${order.status} to ${newStatus}`);
+      }
+  } catch {
+      alert('Error while updating order status');
+  }
 }
 
 </script>

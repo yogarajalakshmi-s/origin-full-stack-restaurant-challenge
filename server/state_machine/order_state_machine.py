@@ -2,12 +2,12 @@ class OrderStateMachine:
     def __init__(self):
         self.state = "Submitted"
         self.transitions = {
-            "Submitted": ["Approved", "Rejected", "Cancel"],
-            "Approved": ["In Preparation", "Cancel"],
+            "Submitted": ["Approved", "Rejected", "Cancelled"],
+            "Approved": ["In Preparation", "Cancelled"],
             "In Preparation": ["In Delivery"],
             "In Delivery": ["Delivered"],
             "Rejected": [],
-            "Cancel": [],
+            "Cancelled": [],
             "Delivered": [],
         }
 
