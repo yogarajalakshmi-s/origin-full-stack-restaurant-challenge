@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 import server.models as md
+from server.state_machine.order_state_machine import OrderStateMachine
 
 
 def get_orders(user_id: int, db_session: Session):
@@ -40,3 +41,21 @@ def check_order(user_id: int, plate_id: int, db_session: Session):
         user_id=user_id, plate_id=plate_id).first()
 
     return True if order else False
+
+
+def search_order(order_id: int, db_session: Session):
+    order = db_session.query(md.Order).filter(md.Order.order_id == order_id).first()
+    return order
+
+def update_order_state(order, new_status: str, db_session: Session):
+        order_state_machine = OrderStateMachine()
+        order_state_machine.state = order.status
+        state = order_state_machine.transition(new_status)
+
+        if state == "Invalid transition":
+            return
+
+        order.status = state
+        db_session.commit()
+        db_session.refresh(order)
+        return order

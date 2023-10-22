@@ -66,6 +66,7 @@ class Order(Base):
 
     order_id = Column(Integer, primary_key=True)
     order_time = Column(DateTime(timezone=True), default=datetime.now, nullable=False)
+    status = Column(String, default="Submitted")
 
     __finish_time = Column(DateTime(timezone=True), default=random_delay, nullable=False)
 

@@ -27,7 +27,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public."order" (
     order_id integer NOT NULL,
     order_time timestamp with time zone NOT NULL,
-    "_Order__finish_time" timestamp with time zone NOT NULL
+    "_Order__finish_time" timestamp with time zone NOT NULL,
+    status text
 );
 
 
@@ -123,11 +124,11 @@ ALTER TABLE ONLY public.plate ALTER COLUMN plate_id SET DEFAULT nextval('public.
 -- Data for Name: order; Type: TABLE DATA; Schema: public; Owner: tech_user
 --
 
-COPY public."order" (order_id, order_time, "_Order__finish_time") FROM stdin;
-1	2023-05-02 23:25:48.168407+00	2023-05-02 23:37:22.168469+00
-2	2023-05-02 23:31:14.594509+00	2023-05-02 23:35:39.594689+00
-3	2023-05-02 23:31:35.101242+00	2023-05-02 23:35:43.101272+00
-4	2023-05-02 23:31:46.821307+00	2023-05-02 23:39:43.821336+00
+COPY public."order" (order_id, order_time, "_Order__finish_time", status) FROM stdin;
+1	2023-05-02 23:25:48.168407+00	2023-05-02 23:37:22.168469+00	Submitted
+2	2023-05-02 23:31:14.594509+00	2023-05-02 23:35:39.594689+00	Submitted
+3	2023-05-02 23:31:35.101242+00	2023-05-02 23:35:43.101272+00	Submitted
+4	2023-05-02 23:31:46.821307+00	2023-05-02 23:39:43.821336+00	Submitted
 \.
 
 
