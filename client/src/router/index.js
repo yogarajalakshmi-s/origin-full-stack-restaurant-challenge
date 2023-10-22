@@ -28,7 +28,7 @@ const isAuthenticatedGuard = (to, from, next) => {
 const routes = [
   { path: '/register', component: RegistrationForm },
   { path: '/login', component: LoginForm},
-  { path: '/not-logged-in', name: 'not-logged-in', component: NotLoggedInMessage }, // Redirect to this page when users try to access pages other than Menu.
+  { path: '/not-logged-in', name: 'not-logged-in', component: NotLoggedInMessage }, // Redirect to this page when unauthenticated users try to access pages other than Menu.
   { path: '/', component: Menu },
   { path: '/orders', component: Orders,
     meta: { requiresAuth: true } // Adding a meta field for authentication requirement

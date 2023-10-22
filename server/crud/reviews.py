@@ -9,7 +9,6 @@ def add_review(review_rating, db_session: Session):
         rating=review_rating.rating,
         comment=review_rating.comment
     )
-    print(review);
     db_session.add(review)
     db_session.commit()
     db_session.refresh(review)

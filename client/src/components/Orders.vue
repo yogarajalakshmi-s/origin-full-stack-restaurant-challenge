@@ -98,6 +98,7 @@ function getOrderTotal(orderId) {
     return total.toFixed(2);
 }
 
+// Returning valid statuses to display in the dropdown
 function nextValidStatuses(order) {
   const currentStatus = order.status;
   const validTransitions = {
@@ -112,6 +113,7 @@ function nextValidStatuses(order) {
   return validTransitions[currentStatus];
 }
 
+// Updating order status
 async function updateOrderStatus(order, newStatus) {
 
   const response = await fetch(`/api/orders/update-order-status/${order.order_id}?status=${newStatus}`, {
