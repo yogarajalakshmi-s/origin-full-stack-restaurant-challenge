@@ -1,6 +1,6 @@
 ### Recruitment Challenge
 
-The aim of this challenge is to add features to an existing simplified meal ordering platform.
+CERN full stack challenge. The aim of this challenge is to add features to an existing simplified meal ordering platform.
 
 #### 1. **User Authentication:**
    - A client-side modal for login and registration.
